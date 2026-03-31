@@ -104,7 +104,7 @@ class NoxInfoView extends WatchUi.WatchFace {
         var clockTime = System.getClockTime();
 
         // --- Heart rate ---
-        var hr = "72";
+        var hr = "--";
         var actInfo = Activity.getActivityInfo();
         if (actInfo != null && actInfo.currentHeartRate != null) {
             hr = actInfo.currentHeartRate.format("%d");
@@ -123,15 +123,15 @@ class NoxInfoView extends WatchUi.WatchFace {
         }
 
         // --- Steps ---
-        var steps = "0";
+        var steps = "--";
         var actMonInfo = ActivityMonitor.getInfo();
         if (actMonInfo != null && actMonInfo.steps != null) {
             steps = actMonInfo.steps.format("%d");
         }
 
         // --- Weather ---
-        var temp        = "18\u00b0";
-        var humidity    = "62%";
+        var temp        = "--\u00b0";
+        var humidity    = "--%";
         var highTemp    = "--\u00b0";
         var lowTemp     = "--\u00b0";
         var weatherCond = -1;
@@ -147,8 +147,8 @@ class NoxInfoView extends WatchUi.WatchFace {
         }
 
         // --- Sunrise / Sunset ---
-        var sunriseStr = "06:30";
-        var sunsetStr  = "19:45";
+        var sunriseStr = "--:--";
+        var sunsetStr  = "--:--";
         var sunriseMin = 6 * 60 + 30;
         var sunsetMin  = 19 * 60 + 45;
         if (Weather has :getSunrise) {

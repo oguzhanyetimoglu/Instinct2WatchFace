@@ -11,9 +11,11 @@ import Toybox.SensorHistory;
 import Toybox.Weather;
 import Toybox.Position;
 
-class Instinct2WatchFaceView extends WatchUi.WatchFace {
+class NoxInfoView extends WatchUi.WatchFace {
 
     var _secX as Number = 0; // seconds x position, set in onUpdate for use in onPartialUpdate
+    var _fgColor as Number = Graphics.COLOR_WHITE;
+    var _bgColor as Number = Graphics.COLOR_BLACK;
 
     var _bmpFootprints as WatchUi.BitmapResource?;
     var _bmpBluetooth  as WatchUi.BitmapResource?;
@@ -177,12 +179,20 @@ class Instinct2WatchFaceView extends WatchUi.WatchFace {
             today.month.format("%02d")
         ]);
 
-        // --- Bluetooth / Notifications (dummy) ---
+        // --- Bluetooth / Notifications ---
         var devSettings   = System.getDeviceSettings();
         var isBtConnected = devSettings.phoneConnected;
         var notifCount    = devSettings.notificationCount;
 
-        dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
+        // --- Reverse Colors ---
+        var reverseColors = Application.Properties.getValue("ReverseColors") as Boolean;
+        var fgColor = (reverseColors == true) ? Graphics.COLOR_BLACK : Graphics.COLOR_WHITE;
+        var bgColor = (reverseColors == true) ? Graphics.COLOR_WHITE : Graphics.COLOR_BLACK;
+        _bgColor = bgColor;
+        _fgColor = fgColor;
+        dc.setColor(Graphics.COLOR_TRANSPARENT, bgColor);
+        dc.clear();
+        dc.setColor(fgColor, Graphics.COLOR_TRANSPARENT);
 
         // Row 1: Steps
         if (_bmpFootprints != null) { dc.drawBitmap(40, 6, _bmpFootprints); }
@@ -202,22 +212,26 @@ class Instinct2WatchFaceView extends WatchUi.WatchFace {
                 Graphics.TEXT_JUSTIFY_LEFT | Graphics.TEXT_JUSTIFY_VCENTER);
         }
 
-        // Stress ring (r=29, fits inside bezel circle centered at 144,31)
+        // Stress ring (r=27, penWidth=4 → outer edge stays at ~29, grows inward)
         var sweep = (stress * 360.0 / 100.0).toNumber();
-        dc.setPenWidth(4);
+        dc.setPenWidth(3);
         dc.setColor(Graphics.COLOR_DK_GRAY, Graphics.COLOR_TRANSPARENT);
-        dc.drawArc(144, 31, 29, Graphics.ARC_CLOCKWISE, 90, 90 - 360);
-        dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
+        dc.drawArc(144, 31, 27, Graphics.ARC_CLOCKWISE, 90, 90 - 360);
+        dc.setColor(fgColor, Graphics.COLOR_TRANSPARENT);
         if (sweep > 0) {
-            dc.drawArc(144, 31, 29, Graphics.ARC_CLOCKWISE, 90, 90 - sweep);
+            dc.drawArc(144, 31, 27, Graphics.ARC_CLOCKWISE, 90, 90 - sweep);
         }
         dc.setPenWidth(1);
-        dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
+        dc.setColor(fgColor, Graphics.COLOR_TRANSPARENT);
 
         // Heart rate (inside bezel circle)
         if (_bmpHeartRate != null) { dc.drawBitmap(136, 7, _bmpHeartRate); }
         dc.drawText(144, 39, Graphics.FONT_LARGE, hr,
             Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
+
+        // Date — fixed position, centered
+        dc.drawText(20, 52, Graphics.FONT_SMALL, dayDateStr,
+            Graphics.TEXT_JUSTIFY_LEFT | Graphics.TEXT_JUSTIFY_VCENTER);
 
         // Time + seconds (horizontally centered as a group)
         var timeStr   = Lang.format("$1$:$2$", [clockTime.hour.format("%02d"), clockTime.min.format("%02d")]);
@@ -227,10 +241,6 @@ class Instinct2WatchFaceView extends WatchUi.WatchFace {
         var gap       = 6;
         var groupLeft = 88 - (timeW + gap + secW) / 2;
         _secX = groupLeft + timeW + gap;
-
-        // Date above time, aligned to same left edge
-        dc.drawText(groupLeft, 52, Graphics.FONT_SMALL, dayDateStr,
-            Graphics.TEXT_JUSTIFY_LEFT | Graphics.TEXT_JUSTIFY_VCENTER);
 
         dc.drawText(groupLeft + timeW / 2, 82, Graphics.FONT_NUMBER_THAI_HOT, timeStr,
             Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
@@ -263,7 +273,7 @@ class Instinct2WatchFaceView extends WatchUi.WatchFace {
         var ssX    = tlX1 + (sunsetMin  * tlW / (24 * 60));
         var nowX   = tlX1 + (nowMin     * tlW / (24 * 60));
 
-        dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
+        dc.setColor(fgColor, Graphics.COLOR_TRANSPARENT);
         for (var xi = tlX1; xi <= srX - 2; xi++) {
             if ((xi - tlX1) % 2 == 0) {
                 dc.fillRectangle(xi, tlY, 1, 1);
@@ -296,9 +306,9 @@ class Instinct2WatchFaceView extends WatchUi.WatchFace {
         var secW   = dc.getTextDimensions(secStr, Graphics.FONT_LARGE)[0];
         var secH   = dc.getTextDimensions(secStr, Graphics.FONT_LARGE)[1];
         dc.setClip(_secX - 1, 86 - secH / 2 - 1, secW + 4, secH + 2);
-        dc.setColor(Graphics.COLOR_BLACK, Graphics.COLOR_BLACK);
+        dc.setColor(_bgColor, _bgColor);
         dc.fillRectangle(_secX - 1, 86 - secH / 2 - 1, secW + 4, secH + 2);
-        dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
+        dc.setColor(_fgColor, Graphics.COLOR_TRANSPARENT);
         dc.drawText(_secX, 86, Graphics.FONT_LARGE, secStr,
             Graphics.TEXT_JUSTIFY_LEFT | Graphics.TEXT_JUSTIFY_VCENTER);
         dc.clearClip();

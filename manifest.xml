@@ -5,7 +5,7 @@
         Use "Monkey C: Edit Application" from the Visual Studio Code command palette
         to update the application attributes.
     -->
-    <iq:application id="7d61624c-cc18-4d21-9a47-e1dbca4b45ff" type="watchface" name="@Strings.AppName" entry="Instinct2WatchFaceApp" launcherIcon="@Drawables.LauncherIcon" minApiLevel="3.2.0">
+    <iq:application id="7d61624c-cc18-4d21-9a47-e1dbca4b45ff" type="watchface" name="@Strings.AppName" entry="NoxInfoApp" launcherIcon="@Drawables.LauncherIcon" minApiLevel="3.2.0">
         <!--
             Use the following from the Visual Studio Code comand palette to edit
             the build targets:
@@ -22,10 +22,10 @@
         -->
         <iq:permissions>
             <iq:uses-permission id="Background"/>
+            <iq:uses-permission id="Positioning"/>
             <iq:uses-permission id="Sensor"/>
             <iq:uses-permission id="SensorHistory"/>
             <iq:uses-permission id="UserProfile"/>
-            <iq:uses-permission id="Positioning"/>
         </iq:permissions>
         <!--
             Use "Monkey C: Edit Languages" from the Visual Studio Code command

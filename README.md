@@ -1,12 +1,10 @@
-# Instinct2WatchFace
+# Nox Info
 
 A custom Garmin Connect IQ watch face for the **Garmin Instinct 2**, built in Monkey C.
 
 ---
 
 ## Screenshot
-
-<!-- Save your screenshot as "preview.png" in the root of this project folder (same folder as this README), then it will appear here automatically. -->
 
 ![Preview](preview.png)
 
@@ -39,7 +37,7 @@ A custom Garmin Connect IQ watch face for the **Garmin Instinct 2**, built in Mo
 
 ```bash
 # Build
-monkeyc -o bin/Instinct2WatchFace.prg -f monkey.jungle -d instinct2 -y <developer_key>
+monkeyc -o bin/NoxInfo.prg -f monkey.jungle -d instinct2 -y <developer_key>
 
 # Watch mode (auto-rebuild + simulator restart on file change)
 bash watch.sh
@@ -47,7 +45,7 @@ bash watch.sh
 
 **Deploy to device:**
 ```bash
-cp bin/Instinct2WatchFace.prg /Volumes/GARMIN/GARMIN/Apps/
+cp bin/NoxInfo.prg /Volumes/GARMIN/GARMIN/Apps/
 ```
 
 ---
@@ -57,7 +55,7 @@ cp bin/Instinct2WatchFace.prg /Volumes/GARMIN/GARMIN/Apps/
 - **App ID:** `7d61624c-cc18-4d21-9a47-e1dbca4b45ff`
 - **Target device:** Instinct 2
 - **Min API:** 3.2.0
-- **Permissions:** Background, Sensor, SensorHistory, UserProfile
+- **Permissions:** Background, Sensor, SensorHistory, UserProfile, Positioning
 
 ---
 

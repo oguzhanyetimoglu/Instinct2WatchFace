@@ -2,7 +2,7 @@ import Toybox.Application;
 import Toybox.Lang;
 import Toybox.WatchUi;
 
-class Instinct2WatchFaceApp extends Application.AppBase {
+class NoxInfoApp extends Application.AppBase {
 
     function initialize() {
         AppBase.initialize();
@@ -18,7 +18,7 @@ class Instinct2WatchFaceApp extends Application.AppBase {
 
     // Return the initial view of your application here
     function getInitialView() as [Views] or [Views, InputDelegates] {
-        return [ new Instinct2WatchFaceView() ];
+        return [ new NoxInfoView() ];
     }
 
     // New app settings have been received so trigger a UI update
@@ -28,6 +28,6 @@ class Instinct2WatchFaceApp extends Application.AppBase {
 
 }
 
-function getApp() as Instinct2WatchFaceApp {
-    return Application.getApp() as Instinct2WatchFaceApp;
+function getApp() as NoxInfoApp {
+    return Application.getApp() as NoxInfoApp;
 }
